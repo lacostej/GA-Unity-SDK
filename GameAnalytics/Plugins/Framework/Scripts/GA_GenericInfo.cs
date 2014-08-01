@@ -176,9 +176,7 @@ public  class GA_GenericInfo
 	        	PhysicalAddress address = adapter.GetPhysicalAddress();
 				if (address.ToString() != "" && mac == "")
 				{
-					byte[] bytes = Encoding.UTF8.GetBytes(address.ToString());
-					SHA1CryptoServiceProvider SHA = new SHA1CryptoServiceProvider();
-					mac = BitConverter.ToString(SHA.ComputeHash(bytes)).Replace("-", "");
+					mac = GA_Submit.CreateSha1Hash(address.ToString());
 				}
 			}
 			return mac;

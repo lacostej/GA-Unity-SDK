@@ -16,7 +16,7 @@ public class GA_Debug
 	
 	private int _errorCount = 0;
 	
-	private bool _showLogOnGUI = false;
+	private static bool _showLogOnGUI = false;
 	public List<string> Messages;
 	
 	/// <summary>
@@ -42,7 +42,7 @@ public class GA_Debug
 			}
 			Messages.Add(logString);
 		}
-		
+
 		//We only submit exceptions and errors
         if (SubmitErrors && _errorCount < MaxErrorCount && type != LogType.Log)
 		{
@@ -103,5 +103,13 @@ public class GA_Debug
 		}
 		
 		GA.API.Error.NewErrorEvent(severity, message, target.x, target.y, target.z);
+	}
+
+	/// <summary>
+	/// Used only for testing purposes
+	/// </summary>
+	public static void EnabledLog ()
+	{
+		_showLogOnGUI = true;
 	}
 }

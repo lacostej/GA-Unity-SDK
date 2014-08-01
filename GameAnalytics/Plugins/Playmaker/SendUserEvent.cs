@@ -36,7 +36,7 @@ namespace HutongGames.PlayMaker.Actions
 		public FsmString installAd;
 		public FsmString installKeyword;
 		public FsmString facebookId;
-
+		public FsmString android_adID;
 
 
 		public bool advanced;
@@ -60,7 +60,8 @@ namespace HutongGames.PlayMaker.Actions
 			installAdGroup		= new FsmString() { UseVariable = true};
 			installAd			= new FsmString() { UseVariable = true};
 			installKeyword		= new FsmString() { UseVariable = true};
-			facebookId		= new FsmString() { UseVariable = true};
+			facebookId			= new FsmString() { UseVariable = true};
+			android_adID		= new FsmString() { UseVariable = true};
 		}
 		
 		public override void OnEnter()
@@ -90,7 +91,8 @@ namespace HutongGames.PlayMaker.Actions
 				installAdGroup.IsNone	? null : installAdGroup.Value,  
 				installAd.IsNone		? null : installAd.Value,  
 				installKeyword.IsNone	? null : installKeyword.Value,
-				facebookId.IsNone		? null : facebookId.Value
+				facebookId.IsNone		? null : facebookId.Value,
+				android_adID.IsNone		? null : android_adID.Value
 				);
 
 		

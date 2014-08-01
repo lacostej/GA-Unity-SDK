@@ -466,7 +466,7 @@ public class GA_Submit
 	public static string CreateMD5Hash(string input)
 	{
 		#if !UNITY_FLASH && !UNITY_WP8 && !UNITY_METRO
-		
+
 		// Gets the MD5 hash for input
 		MD5 md5 = new MD5CryptoServiceProvider();
 		byte[] data = Encoding.UTF8.GetBytes(input);
@@ -540,14 +540,19 @@ public class GA_Submit
 	/// The sha1 hash encoded result of input <see cref="System.String"/>
 	/// </returns>
 	#if !UNITY_FLASH && !UNITY_WP8 && !UNITY_METRO
-	public string CreateSha1Hash(string input)
+	public static string CreateSha1Hash(string input)
 	{
+		byte[] bytes = Encoding.UTF8.GetBytes(input);
+		SHA1CryptoServiceProvider SHA = new SHA1CryptoServiceProvider();
+		return BitConverter.ToString(SHA.ComputeHash(bytes)).Replace("-", "");
+		/*
 		// Gets the sha1 hash for input
 		SHA1 sha1 = new SHA1CryptoServiceProvider();
 		byte[] data = Encoding.UTF8.GetBytes(input);
 		byte[] hash = sha1.ComputeHash(data);
 		// Returns sha1 hash as string
 		return Convert.ToBase64String(hash);
+		*/
 	}
 	
 	public string GetPrivateKey()

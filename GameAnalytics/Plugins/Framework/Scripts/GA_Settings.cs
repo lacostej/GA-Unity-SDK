@@ -42,7 +42,7 @@ public class GA_Settings : ScriptableObject
 	/// The version of the GA Unity Wrapper plugin
 	/// </summary>
 	[HideInInspector]
-	public static string VERSION = "0.6.4";
+	public static string VERSION = "0.6.5";
 	
 	#endregion
 	
@@ -299,7 +299,12 @@ public class GA_Settings : ScriptableObject
 				//gaTracking.AddComponent<GA_Tracking>();
 				
 				#else
-				
+
+				while (GA.SettingsGA.CustomUserID && GA.API.GenericInfo.UserID == string.Empty)
+				{
+					yield return new WaitForSeconds(5f);
+				}
+
 				GA_Queue.ForceSubmit();
 				GameObject fbGameObject = new GameObject("GA_FacebookSDK");
 				fbGameObject.AddComponent<GA_FacebookSDK>();
@@ -342,12 +347,36 @@ public class GA_Settings : ScriptableObject
 		
 		string os = "";
 		string[] osSplit = SystemInfo.operatingSystem.Split(' ');
-		if (osSplit.Length > 0)
-			os = osSplit[0];
-		
+
+			#if UNITY_IPHONE
+			
+			if (osSplit.Length > 0)
+				os = "iOS " + osSplit[2].Substring(0, 1);
+			
+			#elif UNITY_ANDROID
+			
+			if (osSplit.Length > 0)
+			{
+				string[] osvSplit = osSplit[2].Split('.');
+				os = osSplit[0] + " " + osvSplit[0] + "." + osvSplit[1];
+			}
+			
+			#else
+			
+			if (osSplit.Length > 0)
+				os = osSplit[0];
+			
+			#endif
+
 		#endif
 
 		#if UNITY_IPHONE && !UNITY_EDITOR && IOS_ID
+
+		string os_minor = "";
+		string[] osmSplit = SystemInfo.operatingSystem.Split(' ');
+
+		if (osmSplit.Length > 0)
+			os_minor = "iOS " + osmSplit[2];
 		
 		try
 		{
@@ -355,9 +384,9 @@ public class GA_Settings : ScriptableObject
 			if (iOSid != null && iOSid != string.Empty)
 			{
 				if (iOSid.StartsWith("VENDOR-"))
-					GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, null, null, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?SystemInfo.operatingSystem:null, "GA Unity SDK " + VERSION, null);
+					GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, null, null, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?os_minor:null, "GA Unity SDK " + VERSION, null);
 				else
-					GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, iOSid, null, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?SystemInfo.operatingSystem:null, "GA Unity SDK " + VERSION, null);
+					GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, iOSid, null, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?os_minor:null, "GA Unity SDK " + VERSION, null);
 				
 				returnValue = true;
 			}
@@ -366,15 +395,19 @@ public class GA_Settings : ScriptableObject
 		{ }
 		
 		#elif UNITY_ANDROID && !UNITY_EDITOR
+
+		string os_minor = "";
+		string[] osmSplit = SystemInfo.operatingSystem.Split(' ');
 		
+		if (osmSplit.Length > 0)
+			os_minor = osmSplit[0] + " " + osmSplit[2];
+
 		try
 		{
-			string androidID = GetUniqueIDAndroid();
 			string androidAdID = GetAdvertisingIDAndroid();
-			if ((androidID != null && androidID != string.Empty) ||
-			    (androidAdID != null && androidAdID != string.Empty))
+			if (androidAdID != null && androidAdID != string.Empty)
 			{
-				GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, null, androidID, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?SystemInfo.operatingSystem:null, "GA Unity SDK " + VERSION, androidAdID);
+				GA.API.User.NewUser(GA_User.Gender.Unknown, null, null, null, null, AutoSubmitUserInfo?GA_GenericInfo.GetSystem():null, AutoSubmitUserInfo?device:null, AutoSubmitUserInfo?os:null, AutoSubmitUserInfo?os_minor:null, "GA Unity SDK " + VERSION, androidAdID);
 				returnValue = true;
 			}
 		}
@@ -420,26 +453,6 @@ public class GA_Settings : ScriptableObject
 		return uid;
 	}
 	
-	public string GetUniqueIDAndroid ()
-	{
-		string uid = null;
-		
-		#if UNITY_ANDROID && !UNITY_EDITOR
-		try
-		{
-			AndroidJavaClass up = new AndroidJavaClass ("com.unity3d.player.UnityPlayer");
-			AndroidJavaObject currentActivity = up.GetStatic<AndroidJavaObject> ("currentActivity");
-			AndroidJavaObject contentResolver = currentActivity.Call<AndroidJavaObject> ("getContentResolver");
-			AndroidJavaClass secure = new AndroidJavaClass ("android.provider.Settings$Secure");
-			uid = secure.CallStatic<string> ("getString", contentResolver, "android_id");
-		}
-		catch
-		{ }
-		#endif
-		
-		return uid;
-	}
-
 	public string GetAdvertisingIDAndroid ()
 	{
 		string uid = null;

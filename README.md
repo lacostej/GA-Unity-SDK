@@ -4,6 +4,14 @@ NOTE: To use this GIT repository in your Unity game please add the contents dire
 
 ### Recent Changes:
 
+##### v.0.6.5:
+
+- Fix to Android advertising ID.
+- Fixed a bug with custom user id.
+- Fixed OS Version filter values for iOS / Android.
+- Changed the default Critical FPS settings and fixed the event value sent.
+- Fixed an issue with the PlayMaker and Facebook SDK integration.
+
 ##### v.0.6.4:
 
 - Fixed unknown SDK version (displayed on web).

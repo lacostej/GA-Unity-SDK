@@ -1,8 +1,7 @@
-using UnityEngine;
-using System;
-
 #if false
 
+using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Facebook;
@@ -46,9 +45,9 @@ public class GA_FacebookSDK : MonoBehaviour
 				}
 
 				if (_friendCount > -1)
-					GA.API.User.NewUser(gender, null, _friendCount, null, null, null, null, null, null, null, null, null, null, null, null, null, _userID);
+					GA.API.User.NewUser(gender, null, _friendCount, null, null, null, null, null, null, null, null, null, null, null, null, null, _userID, null);
 				else
-					GA.API.User.NewUser(gender, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _userID);
+					GA.API.User.NewUser(gender, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _userID, null);
 			}
 		}
 	}
@@ -126,6 +125,8 @@ public class GA_FacebookSDK : MonoBehaviour
 }
 
 #else
+
+using UnityEngine;
 
 public class GA_FacebookSDK : MonoBehaviour
 {

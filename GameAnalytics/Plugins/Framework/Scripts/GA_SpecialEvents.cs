@@ -108,7 +108,7 @@ public class GA_SpecialEvents : MonoBehaviour
 		{
 			float timeSinceUpdate = Time.time - _lastUpdateCrit;
 			
-			if (timeSinceUpdate > 1.0f)
+			if (timeSinceUpdate >= 1.0f)
 			{
 				float fpsSinceUpdate = _frameCountCrit / timeSinceUpdate;
 				_lastUpdateCrit = Time.time;
@@ -117,10 +117,9 @@ public class GA_SpecialEvents : MonoBehaviour
 				if (fpsSinceUpdate <= GA_SystemTracker.GA_SYSTEMTRACKER.FpsCriticalThreshold)
 				{
 					if (GA.SettingsGA.TrackTarget != null)
-						GA.API.Design.NewEvent("GA:CriticalFPS", _frameCountCrit, GA.SettingsGA.TrackTarget.position);
+						GA.API.Design.NewEvent("GA:CriticalFPS", ((int)fpsSinceUpdate), GA.SettingsGA.TrackTarget.position);
 					else
-						GA.API.Design.NewEvent("GA:CriticalFPS", _frameCountCrit);
-					
+						GA.API.Design.NewEvent("GA:CriticalFPS", ((int)fpsSinceUpdate));
 				}
 			}
 		}

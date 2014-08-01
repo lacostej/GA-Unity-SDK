@@ -26,8 +26,8 @@ public class GA_SystemTracker : MonoBehaviour
 	public bool SubmitErrorSystemInfo = true;
 	public bool SubmitFpsAverage = true;
 	public bool SubmitFpsCritical = true;
-	public int FpsCriticalThreshold = 30;
-	public int FpsCirticalSubmitInterval = 10;
+	public int FpsCriticalThreshold = 20;
+	public int FpsCirticalSubmitInterval = 1;
 	public bool GuiEnabled;
 	public bool GuiAllowScreenshot;
 
