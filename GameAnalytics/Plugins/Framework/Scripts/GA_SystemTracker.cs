@@ -60,7 +60,7 @@ public class GA_SystemTracker : MonoBehaviour
 		if (GA_SYSTEMTRACKER != null)
 		{
 			// only one system tracker allowed per scene
-			GA.LogWarning("Destroying dublicate GA_SystemTracker - only one is allowed per scene!");
+			GA.LogWarning("Destroying duplicate GA_SystemTracker - only one is allowed per scene!");
 			Destroy(gameObject);
 			return;
 		}
