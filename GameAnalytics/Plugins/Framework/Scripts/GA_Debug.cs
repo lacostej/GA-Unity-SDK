@@ -76,10 +76,6 @@ public class GA_Debug
 	
 	public void SubmitError(string eventName, string message, LogType type)
 	{
-		Vector3 target = Vector3.zero;
-		if (GA.SettingsGA.TrackTarget != null)
-			target = GA.SettingsGA.TrackTarget.position;
-		
 		//GA.API.Quality.NewErrorEvent(eventName, message, target.x, target.y, target.z);
 		
 		GA_Error.SeverityType severity = GA_Error.SeverityType.info;
@@ -102,7 +98,7 @@ public class GA_Debug
 			break;
 		}
 		
-		GA.API.Error.NewErrorEvent(severity, message, target.x, target.y, target.z);
+		GA.API.Error.NewErrorEvent(severity, message);
 	}
 
 	/// <summary>

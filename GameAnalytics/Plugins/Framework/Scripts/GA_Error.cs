@@ -13,24 +13,14 @@ public class GA_Error
 	
 	#region public methods
 	
-	public void NewEvent(SeverityType severity, string message, Vector3 trackPosition)
-	{
-		CreateNewEvent(severity, message, trackPosition.x, trackPosition.y, trackPosition.z, false);
-	}
-	
-	public void NewEvent(SeverityType severity, string message, float x, float y, float z)
-	{
-		CreateNewEvent(severity, message, x, y, z, false);
-	}
-	
 	public void NewEvent(SeverityType severity, string message)
 	{
-		CreateNewEvent(severity, message, null, null, null, false);
+		CreateNewEvent(severity, message, false);
 	}
 	
-	public void NewErrorEvent(SeverityType severity, string message, float x, float y, float z)
+	public void NewErrorEvent(SeverityType severity, string message)
 	{
-		CreateNewEvent(severity, message, x, y, z, true);
+		CreateNewEvent(severity, message, true);
 	}
 	
 	#endregion
@@ -49,7 +39,7 @@ public class GA_Error
 	/// <param name="stack">
 	/// If true any identical messages in the queue will be merged/stacked as a single message, to save server load
 	/// </param>
-	private  void CreateNewEvent(SeverityType severity, string message, float? x, float? y, float? z, bool stack)
+	private  void CreateNewEvent(SeverityType severity, string message, bool stack)
 	{
 		Hashtable parameters = new Hashtable()
 		{
@@ -57,21 +47,6 @@ public class GA_Error
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Message], message },
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Level], GA.SettingsGA.CustomArea.Equals(string.Empty)?Application.loadedLevelName:GA.SettingsGA.CustomArea }
 		};
-		
-		if (x.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.X], (x*GA.SettingsGA.HeatmapGridSize.x).ToString());
-		}
-		
-		if (y.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Y], (y*GA.SettingsGA.HeatmapGridSize.y).ToString());
-		}
-		
-		if (z.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Z], (z*GA.SettingsGA.HeatmapGridSize.z).ToString());
-		}
 		
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Error, stack);
 	}

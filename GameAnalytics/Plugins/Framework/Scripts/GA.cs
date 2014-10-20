@@ -46,9 +46,6 @@ public class GA {
 		public GA_GenericInfo GenericInfo = new GA_GenericInfo();
 		public GA_Debug Debugging = new GA_Debug();
 		public GA_Archive Archive = new GA_Archive();
-#if UNITY_EDITOR || !UNITY_FLASH
-		public GA_Request Request = new GA_Request();	
-#endif
 		public GA_Submit Submit = new GA_Submit();
 		public GA_User User = new GA_User();
 	}
@@ -197,7 +194,7 @@ public class GA {
 	public static void HierarchyWindowCallback (int instanceID, Rect selectionRect)
 	{
 		GameObject go = (GameObject)EditorUtility.InstanceIDToObject(instanceID);
-		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_HeatMapDataFilter>() != null || go.GetComponent<GA_AdSupport>() != null))
+		if (go != null && (go.GetComponent<GA_Tracker>() != null || go.GetComponent<GA_SystemTracker>() != null || go.GetComponent<GA_AdSupport>() != null))
 		{
 			float addX = 0;
 			if (go.GetComponent("PlayMakerFSM") != null)

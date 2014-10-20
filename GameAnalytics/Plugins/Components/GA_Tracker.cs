@@ -32,13 +32,9 @@ public class GA_Tracker : MonoBehaviour
 	
 	public bool TrackedEventsFoldOut = false;
 	
-	public bool TrackTarget = false;
-	
 	public bool ShowGizmo = true;
 	
 	public float BreadCrumbTrackInterval = 1.0f;
-	
-	private bool _trackTargetAlreadySet;
 	
 	private float _lastBreadCrumbTrackTime;
 	
@@ -73,17 +69,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.Start))
 		{
-			GA.API.Design.NewEvent("Start:"+gameObject.name, transform.position);
-		}
-		
-		if (TrackTarget)
-		{
-			GA.SettingsGA.TrackTarget = transform;
-			if (_trackTargetAlreadySet)
-			{
-				GA.LogWarning("You should only set the Track Target of GA_Tracker once per scene");
-			}
-			_trackTargetAlreadySet = true;
+			GA.API.Design.NewEvent("Start:"+gameObject.name);
 		}
 	}
 	
@@ -97,7 +83,7 @@ public class GA_Tracker : MonoBehaviour
 			if (Time.time > _lastBreadCrumbTrackTime + BreadCrumbTrackInterval)
 			{
 				_lastBreadCrumbTrackTime = Time.time;
-				GA.API.Design.NewEvent("BreadCrumb:"+gameObject.name, transform.position);
+				GA.API.Design.NewEvent("BreadCrumb:"+gameObject.name);
 			}
 		}
 	}
@@ -109,7 +95,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.OnDestroy))
 		{
-			GA.API.Design.NewEvent("OnDestroy:"+gameObject.name, transform.position);
+			GA.API.Design.NewEvent("OnDestroy:"+gameObject.name);
 		}
 	}
 	
@@ -120,7 +106,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.OnLevelWasLoaded))
 		{
-			GA.API.Design.NewEvent("OnLevelWasLoaded:"+gameObject.name, transform.position);
+			GA.API.Design.NewEvent("OnLevelWasLoaded:"+gameObject.name);
 		}
 	}
 	
@@ -131,7 +117,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.OnTriggerEnter))
 		{
-			GA.API.Design.NewEvent("OnTriggerEnter:"+gameObject.name, transform.position);
+			GA.API.Design.NewEvent("OnTriggerEnter:"+gameObject.name);
 		}
 	}
 	
@@ -142,7 +128,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.OnCollisionEnter))
 		{
-			GA.API.Design.NewEvent("OnCollisionEnter:"+gameObject.name, transform.position);
+			GA.API.Design.NewEvent("OnCollisionEnter:"+gameObject.name);
 		}
 	}
 	
@@ -153,7 +139,7 @@ public class GA_Tracker : MonoBehaviour
 		
 		if (TrackedEvents.Contains(GAEventType.OnControllerColliderHit))
 		{
-			GA.API.Design.NewEvent("OnControllerColliderHit:"+gameObject.name, transform.position);
+			GA.API.Design.NewEvent("OnControllerColliderHit:"+gameObject.name);
 		}
 	}
 	

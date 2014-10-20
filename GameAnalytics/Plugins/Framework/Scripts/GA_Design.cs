@@ -17,46 +17,20 @@ public class GA_Design
 	/// <param name='eventValue'>
 	/// A value of the event, can be null
 	/// </param>
-	/// <param name='trackPosition'>
-	/// Position that the event is tied to.
-	/// </param>S
-	public void NewEvent(string eventName, float? eventValue, Vector3 trackPosition)
+	public void NewEvent(string eventName, float? eventValue)
 	{
-		CreateNewEvent(eventName, eventValue, trackPosition.x, trackPosition.y, trackPosition.z);
+		CreateNewEvent(eventName, eventValue);
 	}
-	
+
 	/// <summary>
-	/// Creates a new event...
+	/// Creates a new event
 	/// </summary>
 	/// <param name='eventName'>
 	/// A event string you define
 	/// </param>
-	/// <param name='trackPosition'>
-	/// Position that the event is tied to.
-	/// </param>S
-	public void NewEvent(string eventName, Vector3 trackPosition)
-	{
-		CreateNewEvent(eventName, null, trackPosition.x, trackPosition.y, trackPosition.z);
-	}
-	
-	public void NewEvent(string eventName, float? eventValue, float x, float y, float z)
-	{
-		CreateNewEvent(eventName, eventValue, x, y, z);
-	}
-	
-	public void NewEvent(string eventName, float x, float y, float z)
-	{
-		CreateNewEvent(eventName, null, x, y, z);
-	}
-	
-	public void NewEvent(string eventName, float eventValue)
-	{
-		CreateNewEvent(eventName, eventValue, null, null, null);
-	}
-	
 	public void NewEvent(string eventName)
 	{
-		CreateNewEvent(eventName, null, null, null, null);
+		CreateNewEvent(eventName, null);
 	}
 	
 	#endregion
@@ -78,33 +52,13 @@ public class GA_Design
 	/// <param name="y">
 	/// The y coordinate of the event occurence. This can be null <see cref="System.Nullable<System.Single>"/>
 	/// </param>
-	private void CreateNewEvent(string eventName, float? eventValue, float? x, float? y, float? z)
+	private void CreateNewEvent(string eventName, float? eventValue)
 	{
 		Hashtable parameters = new Hashtable()
 		{
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.EventID], eventName },
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Level], GA.SettingsGA.CustomArea.Equals(string.Empty)?Application.loadedLevelName:GA.SettingsGA.CustomArea }
 		};
-		
-		if (eventValue.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Value], eventValue.ToString());
-		}
-		
-		if (x.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.X], (x*GA.SettingsGA.HeatmapGridSize.x).ToString());
-		}
-		
-		if (y.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Y], (y*GA.SettingsGA.HeatmapGridSize.y).ToString());
-		}
-		
-		if (z.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Z], (z*GA.SettingsGA.HeatmapGridSize.z).ToString());
-		}
 
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Event, false);
 
@@ -119,12 +73,7 @@ public class GA_Design
 			{
 				options = ", value: " + eventValue;
 			}
-			
-			if (x.HasValue && y.HasValue && z.HasValue)
-			{
-				options += ", x: " + x + ", y: " + y + ", z: " + z;
-			}
-			
+
 			GA.Log("GA Design Event added: " + eventName + options, true);
 		}
 		

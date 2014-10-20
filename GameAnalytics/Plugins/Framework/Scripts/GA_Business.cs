@@ -9,20 +9,10 @@ using System.Collections.Generic;
 public class GA_Business 
 {
 	#region public methods
-	
-	public  void NewEvent(string eventName, string currency, int amount, Vector3 trackPosition)
-	{
-		CreateNewEvent(eventName, currency, amount, trackPosition.x, trackPosition.y, trackPosition.z);
-	}
-	
-	public  void NewEvent(string eventName, string currency, int amount, float x, float y, float z)
-	{
-		CreateNewEvent(eventName, currency, amount, x, y, z);
-	}
-	
+
 	public  void NewEvent(string eventName, string currency, int amount)
 	{
-		CreateNewEvent(eventName, currency, amount, null, null, null);
+		CreateNewEvent(eventName, currency, amount);
 	}
 	
 	#endregion
@@ -41,7 +31,7 @@ public class GA_Business
 	/// <param name="amount">
 	/// The value of the transaction in the lowest currency unit. F.x. if currency is USD then amount should be in cent <see cref="System.Int32"/>
 	/// </param>
-	private  void CreateNewEvent(string eventName, string currency, int amount, float? x, float? y, float? z)
+	private  void CreateNewEvent(string eventName, string currency, int amount)
 	{
 		Hashtable parameters = new Hashtable()
 		{
@@ -51,21 +41,6 @@ public class GA_Business
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Level], GA.SettingsGA.CustomArea.Equals(string.Empty)?Application.loadedLevelName:GA.SettingsGA.CustomArea }
 		};
 		
-		if (x.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.X], (x*GA.SettingsGA.HeatmapGridSize.x).ToString());
-		}
-		
-		if (y.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Y], (y*GA.SettingsGA.HeatmapGridSize.y).ToString());
-		}
-		
-		if (z.HasValue)
-		{
-			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Z], (z*GA.SettingsGA.HeatmapGridSize.z).ToString());
-		}
-		
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Purchase, false);
 
 		GA_AdSupport.ShowAdStatic(GA_AdSupport.GAEventType.Custom, GA_AdSupport.GAEventCat.Business, eventName);
@@ -74,14 +49,7 @@ public class GA_Business
 		
 		if (GA.SettingsGA.DebugAddEvent)
 		{
-			string options = "";
-			
-			if (x.HasValue && y.HasValue && z.HasValue)
-			{
-				options = ", x: " + x + ", y: " + y + ", z: " + z;
-			}
-			
-			GA.Log("GA Business Event added: " + eventName + ", currency: " + currency + ", amount: " + amount + options, true);
+			GA.Log("GA Business Event added: " + eventName + ", currency: " + currency + ", amount: " + amount, true);
 		}
 		
 		#endif

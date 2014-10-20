@@ -1,6 +1,5 @@
 #if false
 
-
 using System;
 
 namespace HutongGames.PlayMaker.Actions
@@ -29,6 +28,7 @@ namespace HutongGames.PlayMaker.Actions
 		public override void OnEnter()
 		{
 			DoConvert();
+			Finish();
 		}
 
 		void DoConvert()

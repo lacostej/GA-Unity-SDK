@@ -14,7 +14,7 @@ public class GA_ExampleTutorial : EditorWindow
 	private GUIContent _setupWizard				= new GUIContent("GA Setup Wizard", "Opens the GameAnalytics Setup Wizard, which will guide you through the process of setting up the GA package.");
 	
 	private int _tourStep = 0;
-	private int _lastStep = 6;
+	private int _lastStep = 4;
 	
 	void OnGUI ()
 	{
@@ -88,8 +88,6 @@ public class GA_ExampleTutorial : EditorWindow
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("The GA_Tracker is used to automatically track collision for the ball. Whenever the ball collides with anything in the scene a simple collision event is tracked. The GA_Tracker component can be used to automatically track a number of predefined events for the object this way.", EditorStyles.wordWrappedLabel);
 			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("The GA_Tracker also sets the ball to Track Target - this means that events from the GA_SystemTracker, such as critical FPS and errors, will use the ball's transform position. This way a heatmap may be generated showing where these types of events occurred.", EditorStyles.wordWrappedLabel);
-			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("You can learn more about the GA_Tracker from the GA Setup Wizard or by visiting the online documentation.", EditorStyles.wordWrappedLabel);
 			
 			EditorGUILayout.Space();
@@ -105,7 +103,7 @@ public class GA_ExampleTutorial : EditorWindow
 			}
 			EditorGUILayout.EndHorizontal();
 			
-			GUILayout.Space(30);
+			GUILayout.Space(97);
 			
 			break;
 		case 3:
@@ -163,33 +161,6 @@ public class GA_ExampleTutorial : EditorWindow
 			
 			break;
 		case 5:
-			GUILayout.Label("Heatmaps", EditorStyles.whiteLargeLabel);
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("We put a GA_Heatmap object with previously collected data in the example scene. The \"Show heatmap\" option has now been enabled to show you the heatmap data (you can disabled it at any time from the GA_Heat Map Renderer inspector). Heatmap objects can be added from the menu Window > GameAnalytics > Create GA_Heatmap.", EditorStyles.wordWrappedLabel);
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("Heatmaps provide a 3D visualization of events, giving you an overview of where stuff is happening in your levels.", EditorStyles.wordWrappedLabel);
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("The GA_Heatmap object in this scene shows data for the ball collision event automatically tracked by the GA_Tracker component.", EditorStyles.wordWrappedLabel);
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("You can learn more about the heatmaps from the GA Setup Wizard or by visiting the online documentation.", EditorStyles.wordWrappedLabel);
-			
-			EditorGUILayout.Space();
-			
-			EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Open GA Setup Wizard - Heatmaps:", EditorStyles.boldLabel);
-			if (GUILayout.Button(_setupWizard, GUILayout.Width(150)))
-			{
-				GA_SetupWizard wizard = ScriptableObject.CreateInstance<GA_SetupWizard>();
-				wizard.ShowUtility();
-				wizard.position = new Rect(150, 150, 420, 340);
-				wizard.SetTourStep(7);
-			}
-			EditorGUILayout.EndHorizontal();
-			
-			GUILayout.Space(56);
-			
-			break;
-		case 6:
 			GUILayout.Label("Achievement earned: Tutorial Complete!", EditorStyles.whiteLargeLabel);
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("That's it for the example tutorial. You might want to check out the GA Setup Wizard if you haven't done so already (Window > GameAnalytics > GA Setup Wizard).", EditorStyles.wordWrappedLabel);
@@ -258,14 +229,6 @@ public class GA_ExampleTutorial : EditorWindow
 			else if (_tourStep == 2)
 			{
 				Selection.activeObject = GameObject.Find("Ball");
-			}
-			else if (_tourStep == 5)
-			{
-				GameObject hm = GameObject.Find("GA_HeatMap_Ball_Collisions");
-				Selection.activeObject = hm;
-				
-				if (hm.GetComponent<GA_HeatMapRenderer>().BillBoard != null)
-					hm.GetComponent<GA_HeatMapRenderer>().BillBoard.GetComponent<MeshRenderer>().enabled = true;
 			}
 		}
 	}

@@ -150,11 +150,7 @@ public class GA_Gui : MonoBehaviour
 		{
 			if (_topic.Length > 0 && _details.Length > 0)
 			{
-				Vector3 target = Vector3.zero;
-				if (GA.SettingsGA.TrackTarget != null)
-					target = GA.SettingsGA.TrackTarget.position;
-				
-				GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Feedback [" + _topic + "]: " + _details, target.x, target.y, target.z);
+				GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Feedback [" + _topic + "]: " + _details);
 				
 				_topic = "";
 				_details = "";
@@ -216,16 +212,12 @@ public class GA_Gui : MonoBehaviour
 		{
 			if (_topic.Length > 0 && _details.Length > 0)
 			{
-				Vector3 target = Vector3.zero;
-				if (GA.SettingsGA.TrackTarget != null)
-					target = GA.SettingsGA.TrackTarget.position;
-				
 				if (_popUpError)
 				{
-					GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Crash Report [" + _topic + "]: " + _details, target);
+					GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Crash Report [" + _topic + "]: " + _details);
 				}
 				else
-					GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Bug Report [" + _topic + "]: " + _details, target);
+					GA.API.Error.NewEvent(GA_Error.SeverityType.info, "Bug Report [" + _topic + "]: " + _details);
 				
 				_topic = "";
 				_details = "";

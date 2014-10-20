@@ -43,17 +43,6 @@ public class GA_Menu : MonoBehaviour
 		}
 	}
 	
-	[MenuItem ("Window/GameAnalytics/Create GA_Heatmap", false, 201)]
-	static void AddHeatMap ()
-	{
-		GameObject go = new GameObject("GA_HeatMap");
-		go.AddComponent<GA_HeatMapRenderer>();
-		go.AddComponent<GA_HeatMapDataFilter>();
-		Selection.activeObject = go;
-
-		GA_Tracking.SendEvent("Added:GA_HeatMap");
-	}
-	
 	[MenuItem ("Window/GameAnalytics/Add GA_Tracker to Object", false, 202)]
 	static void AddGATracker ()
 	{

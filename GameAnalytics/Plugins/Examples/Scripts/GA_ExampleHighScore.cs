@@ -40,7 +40,7 @@ public class GA_ExampleHighScore : MonoBehaviour
 		
 		GAMEOVER = true;
 		
-		GA.API.Design.NewEvent("GameOver", position);
+		GA.API.Design.NewEvent("GameOver");
 		
 		GA_Queue.ForceSubmit();
 	}
@@ -49,7 +49,7 @@ public class GA_ExampleHighScore : MonoBehaviour
 	{
 		SCORE += score;
 		
-		GA.API.Design.NewEvent("Score:" + scoreName, 10, position);
+		GA.API.Design.NewEvent("Score:" + scoreName, 10);
 	}
 	
 	private void HighScoreWindow(int windowID)

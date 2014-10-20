@@ -23,7 +23,7 @@ public class GA_Settings : ScriptableObject
 	/// <summary>
 	/// Types of help given in the help box of the GA inspector
 	/// </summary>
-	public enum HelpTypes { None, FpsCriticalAndTrackTargetHelp, GuiAndTrackTargetHelp, IncludeSystemSpecsHelp, ProvideCustomUserID };
+	public enum HelpTypes { None, IncludeSystemSpecsHelp, ProvideCustomUserID };
 	public enum MessageTypes { None, Error, Info, Warning };
 	
 	/// <summary>
@@ -42,7 +42,7 @@ public class GA_Settings : ScriptableObject
 	/// The version of the GA Unity Wrapper plugin
 	/// </summary>
 	[HideInInspector]
-	public static string VERSION = "0.6.5";
+	public static string VERSION = "0.6.6";
 	
 	#endregion
 	
@@ -64,15 +64,10 @@ public class GA_Settings : ScriptableObject
 	
 	public string CustomArea = string.Empty;
 	
-	//Set the track target to use for predefined events, such as CriticalFPS (position of track target is sent with these events).
-	public Transform TrackTarget;
-	
 	[SerializeField]
 	public string GameKey = "";
 	[SerializeField]
 	public string SecretKey = "";
-	[SerializeField]
-	public string ApiKey = "";
 	[SerializeField]
 	public string Build = "0.1";
 
@@ -117,7 +112,6 @@ public class GA_Settings : ScriptableObject
 	public bool NewSessionOnResume = true;
 	public bool AutoSubmitUserInfo = true;
 	public bool DelayQuitToSendData = true;
-	public Vector3 HeatmapGridSize = Vector3.one;
 
 	//bytes
 	public long ArchiveMaxFileSize = 2000;

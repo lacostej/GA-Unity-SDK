@@ -31,8 +31,6 @@ public class GA_Inspector : Editor
 	private GUIContent _passwordLabel			= new GUIContent("Password", "Your GameAnalytics user account password. Must be at least 8 characters in length.");
 	private GUIContent _studiosLabel			= new GUIContent("Studio", "Studios tied to your GameAnalytics user account.");
 	private GUIContent _gamesLabel				= new GUIContent("Game", "Games tied to the selected GameAnalytics studio.");
-	private GUIContent _apiKeyLabel				= new GUIContent("API Key", "Your GameAnalytics API Key - copy/paste from the GA website. This key is used for retrieving data from the GA servers, f.x. when you want to generate heatmaps.");
-	private GUIContent _heatmapSizeLabel		= new GUIContent("Heatmap Grid Size", "The size in Unity units of each heatmap grid space. Data visualized as a heatmap must use the same grid size as was used when the data was collected, otherwise the visualization will be wrong.");
 	private GUIContent _build					= new GUIContent("Build", "The current version of the game. Updating the build name for each test version of the game will allow you to filter by build when viewing your data on the GA website.");
 	//private GUIContent _useBundleVersion		= new GUIContent("Use Bundle Version", "Uses the Bundle Version from Player Settings instead of the Build field above (only works for iOS, Android, and Blackberry).");
 	private GUIContent _debugMode				= new GUIContent("Debug Mode", "Show additional debug messages from GA in the unity editor console when submitting data.");
@@ -83,7 +81,7 @@ public class GA_Inspector : Editor
 	private GUIContent _CBappSig				= new GUIContent("App Signature:", "Your App Signature. You can find this in under your app in Chartboost.");
 	#endif
 
-	private static Texture2D _triggerAdNotEnabledTexture = new Texture2D(1, 1);
+	//private static readonly Texture2D _triggerAdNotEnabledTexture = new Texture2D(1, 1);
 	private static bool _checkedProjectNames = false;
 	
 	private const string _unityToken = "KKy7MQNc2TEUOeK0EMtR";
@@ -928,32 +926,7 @@ public class GA_Inspector : Editor
 			if(ga.CurrentInspectorState == GA_Settings.InspectorStates.Pref)
 			{
 				EditorGUILayout.Space();
-				
-				GUILayout.BeginHorizontal();
-			    //GUILayout.Label("", GUILayout.Width(7));
-			    GUILayout.Label(_apiKeyLabel, GUILayout.Width(75));
-				ga.ApiKey = EditorGUILayout.TextField("", ga.ApiKey);
-				GUILayout.EndHorizontal();
-				
-				EditorGUILayout.Space();
-				
-				GUILayout.BeginHorizontal();
-			    //GUILayout.Label("", GUILayout.Width(7));
-			    GUILayout.Label(_heatmapSizeLabel, GUILayout.Width(150));
-				GUILayout.EndHorizontal();
-				
-				#if UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0
-				GUILayout.Space(-15);
-				#endif
-				
-				ga.HeatmapGridSize = EditorGUILayout.Vector3Field("", ga.HeatmapGridSize);
-				if (ga.HeatmapGridSize != Vector3.one)
-				{
-					EditorGUILayout.HelpBox("Editing the heatmap grid size must be done BEFORE data is submitted, and you must use the same grid size when setting up your heatmaps. Otherwise the heatmap data will be incorrectly displayed.", MessageType.Warning);
-				}
-				
-				EditorGUILayout.Space();
-				
+
 				GUILayout.BeginHorizontal();
 			    //GUILayout.Label("", GUILayout.Width(7));
 			    GUILayout.Label(_interval, GUILayout.Width(150));
@@ -1369,7 +1342,6 @@ public class GA_Inspector : Editor
 					Hashtable results = (Hashtable)resultList[0];
 					ga.GameKey = results["key"].ToString();
 					ga.SecretKey = results["secret_key"].ToString();
-					ga.ApiKey = results["data_api_key"].ToString();
 
 					SetLoginStatus ("Received Game Key and Secret Key. Ready to send events!", ga);
 
@@ -1727,8 +1699,8 @@ public class GA_Inspector : Editor
 			Rect lastrect = GUILayoutUtility.GetLastRect();
 			Color tmpColor = GUI.color;
 			int tmpSize = GUI.skin.label.fontSize;
-			GUI.color = Color.red;
-			GUI.DrawTexture(new Rect(lastrect.x - 2, lastrect.y - 1, 5, 17), _triggerAdNotEnabledTexture);
+			//GUI.color = Color.red;
+			//GUI.DrawTexture(new Rect(lastrect.x - 2, lastrect.y - 1, 5, 17), _triggerAdNotEnabledTexture);
 			GUI.color = Color.white;
 			GUI.skin.label.fontSize = 20;
 			GUI.Label(new Rect(lastrect.x - 5, lastrect.y - 7, 20, 30), _triggerAdNotEnabled);

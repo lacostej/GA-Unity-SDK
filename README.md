@@ -4,6 +4,10 @@ NOTE: To use this GIT repository in your Unity game please add the contents dire
 
 ### Recent Changes:
 
+##### v.0.6.6:
+- Deprecated Heatmaps.
+- Minor fixes.
+
 ##### v.0.6.5:
 
 - Fix to Android advertising ID.

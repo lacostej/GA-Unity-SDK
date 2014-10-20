@@ -13,7 +13,6 @@ using System;
 public class GA_TrackerInspector : Editor
 {
 	private GUIContent _eventFoldOut = new GUIContent("Auto-tracked Events", "The events you can track automatically.");
-	private GUIContent _trackTarget = new GUIContent("Track Target", "Use this objects location when tracking default events, such as critical FPS events. Only one object per scene can be set to track target.");
 	private GUIContent _showGizmo = new GUIContent("Editor Scene Gizmo", "Show a GA gizmo in the scene view for this GA_Tracker.");
 	
 	override public void OnInspectorGUI ()
@@ -33,24 +32,6 @@ public class GA_TrackerInspector : Editor
 			EditorApplication.RepaintHierarchyWindow();
 			SceneView.RepaintAll();
 		}
-		
-		bool trackTargetValue = gaTracker.TrackTarget;
-		
-		GUILayout.BeginHorizontal();
-		GUILayout.Label("", GUILayout.Width(7));
-		GUILayout.Label(_trackTarget, GUILayout.Width(150));
-		trackTargetValue = EditorGUILayout.Toggle("", gaTracker.TrackTarget);
-		GUILayout.EndHorizontal();
-		
-		if (trackTargetValue && !gaTracker.TrackTarget)
-		{
-			GA_Tracker[] gaTrackers = FindObjectsOfType(typeof(GA_Tracker)) as GA_Tracker[];
-			foreach (GA_Tracker gaT in gaTrackers)
-			{
-				gaT.TrackTarget = false;
-			}
-		}
-		gaTracker.TrackTarget = trackTargetValue;
 		
 		gaTracker.TrackedEventsFoldOut = EditorGUILayout.Foldout(gaTracker.TrackedEventsFoldOut, _eventFoldOut);
 		
