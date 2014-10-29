@@ -4,6 +4,9 @@ NOTE: To use this GIT repository in your Unity game please add the contents dire
 
 ### Recent Changes:
 
+##### v.0.6.7:
+- Fixed an issue with the PlayMaker integration.
+
 ##### v.0.6.6:
 - Deprecated Heatmaps.
 - Minor fixes.
