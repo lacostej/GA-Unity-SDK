@@ -60,6 +60,11 @@ public class GA_Design
 			{ GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Level], GA.SettingsGA.CustomArea.Equals(string.Empty)?Application.loadedLevelName:GA.SettingsGA.CustomArea }
 		};
 
+		if (eventValue.HasValue)
+		{
+			parameters.Add(GA_ServerFieldTypes.Fields[GA_ServerFieldTypes.FieldType.Value], eventValue.ToString());
+		}
+
 		GA_Queue.AddItem(parameters, GA_Submit.CategoryType.GA_Event, false);
 
 		GA_AdSupport.ShowAdStatic(GA_AdSupport.GAEventType.Custom, GA_AdSupport.GAEventCat.Design, eventName);
