@@ -4,37 +4,37 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 #if CB_ON
-using Chartboost;
+using ChartboostSDK;
 #endif
 public class GA_AdSupport : MonoBehaviour
 {
 	public enum GAEventCat { Design, Business } //, Quality }
 	public enum GAEventType { AdsEnabled, LevelChange, Custom }
 	public enum GAAdNetwork { Any, iAd, Chartboost }
-
+	
 	#region public values
 	
 	public static GA_AdSupport GA_ADSUPPORT;
-
+	
 	public bool AdsEnabled = false;
 	
 	#endregion
-
+	
 	//private bool _showAdOnLoad = false;
 	private bool _adShowing = false;
-
+	
 	#if UNITY_IPHONE
 	private ADBannerView _iAdBanner = null;
 	#endif
-
+	
 	private string _eventTriggerID = "";
-
+	
 	private float _timePlayed = 0;
 	private int _sessionsPlayed = 0;
 	private static bool _sessionRecorded = false;
-
+	
 	#region unity derived methods
-
+	
 	void Awake()
 	{
 		if (GA_ADSUPPORT != null)
@@ -45,16 +45,11 @@ public class GA_AdSupport : MonoBehaviour
 			return;
 		}
 		GA_ADSUPPORT = this;
-
+		
 		DontDestroyOnLoad(gameObject);
-
-		if (GA.SettingsGA.Start_AlwaysShowAds)
-		{
-			EnableAds();
-		}
-
+		
 		SaveConditions ();
-
+		
 		// iAd
 		if (GA.SettingsGA.IAD_enabled)
 		{
@@ -63,48 +58,55 @@ public class GA_AdSupport : MonoBehaviour
 				_iAdBanner = new ADBannerView(GA.SettingsGA.IAD_type, GA.SettingsGA.IAD_layout);
 			else
 				_iAdBanner = new ADBannerView(ADBannerView.Type.Banner, GA.SettingsGA.IAD_layout);
-
+			
 			if (GA.SettingsGA.IAD_layout == ADBannerView.Layout.Manual)
 			{
 				_iAdBanner.position = GA.SettingsGA.IAD_position;
 			}
-
+			
 			ADBannerView.onBannerWasClicked += OnBannerClicked;
 			ADBannerView.onBannerWasLoaded  += OnBannerLoaded;
 			#endif
 		}
-
+		
 		// Charboost
 		#if CB_ON
 		if (GA.SettingsGA.CB_enabled)
 		{
-			GameObject go = new GameObject("ChartboostManager");
-			go.AddComponent<CBManager>();
+			if (FindObjectOfType(typeof(Chartboost)) == null)
+			{
+				GameObject go = new GameObject("ChartboostManager");
+				go.AddComponent<Chartboost>();
 
-			#if UNITY_ANDROID || UNITY_IPHONE
-			CBBinding.init( GA.SettingsGA.CB_appID, GA.SettingsGA.CB_appSig );
-
-			CBManager.didDismissInterstitialEvent += OnDismissInterstitialEvent;
-			CBManager.didCloseInterstitialEvent += OnCloseInterstitialEvent;
-			CBManager.didClickInterstitialEvent += OnClickInterstitialEvent;
-			CBManager.didShowInterstitialEvent += OnShowInterstitialEvent;
-			#endif
+				Chartboost.didDismissInterstitial += OnDismissInterstitialEvent;
+				Chartboost.didCloseInterstitial += OnCloseInterstitialEvent;
+				Chartboost.didClickInterstitial += OnClickInterstitialEvent;
+				Chartboost.didDisplayInterstitial += OnShowInterstitialEvent;
+			}
 		}
 		#endif
 	}
-
+	
+	void Start ()
+	{
+		if (GA.SettingsGA.Start_AlwaysShowAds)
+		{
+			EnableAds();
+		}
+	}
+	
 	void Update ()
 	{
 		if (GA.SettingsGA.Start_TimePlayed)
 		{
 			_timePlayed += Time.deltaTime;
-
+			
 			if (_timePlayed >= GA.SettingsGA.TimePlayed)
 			{
 				EnableAds();
 			}
 		}
-
+		
 		#if UNITY_ANDROID && CB_ON
 		// Uncomment the following code if you are not handling the Android back button.
 		// Note: This will cause the Android back button to quit your application.
@@ -126,7 +128,7 @@ public class GA_AdSupport : MonoBehaviour
 		*/
 		#endif
 	}
-
+	
 	void OnDestroy()
 	{
 		if (GA_ADSUPPORT == this)
@@ -140,7 +142,7 @@ public class GA_AdSupport : MonoBehaviour
 			SaveConditions ();
 		}
 	}
-
+	
 	void OnLevelWasLoaded ()
 	{
 		SaveConditions ();
@@ -148,7 +150,7 @@ public class GA_AdSupport : MonoBehaviour
 	}
 	
 	#endregion
-
+	
 	public static void ShowAdStatic (GAEventType eventType, GAEventCat eventCategory, string eventID)
 	{
 		if (GA_ADSUPPORT != null)
@@ -156,7 +158,7 @@ public class GA_AdSupport : MonoBehaviour
 			GA_ADSUPPORT.ShowAd (eventType, eventCategory, eventID);
 		}
 	}
-
+	
 	private void ShowAd (GAEventType eventType, GAEventCat eventCategory, string eventID)
 	{
 		if (AdsEnabled)
@@ -187,37 +189,37 @@ public class GA_AdSupport : MonoBehaviour
 			}
 		}
 	}
-
+	
 	private void ShowAdNow(string eventID)
 	{
 		if (_adShowing)
 			return;
-
+		
 		GA.Log("GA Show Ad Now");
-
+		
 		bool iAd = false;
 		bool cb = false;
-
+		
 		#if UNITY_IPHONE
 		if (GA.SettingsGA.IAD_enabled && _iAdBanner != null && _iAdBanner.loaded)
 		{
 			iAd = true;
 		}
 		#endif
-
+		
 		#if CB_ON
 		if (GA.SettingsGA.CB_enabled)
 		{
 			cb = true;
 		}
 		#endif
-
+		
 		_eventTriggerID = eventID;
-
+		
 		if (iAd && cb)
 		{
 			int r = Random.Range(0, 2);
-
+			
 			if (r == 0)
 			{
 				ShowIad();
@@ -236,31 +238,31 @@ public class GA_AdSupport : MonoBehaviour
 			ShowCB();
 		}
 	}
-
+	
 	private void ShowIad ()
 	{
 		#if UNITY_IPHONE
 		_iAdBanner.visible = true;
 		_adShowing = true;
-
+		
 		GA.API.Design.NewEvent("Impressions:iAD:" + _eventTriggerID);
-
+		
 		StartCoroutine(CloseAd(GA.SettingsGA.IAD_Duration));
 		#endif
 	}
-
+	
 	private void ShowCB ()
 	{
 		#if CB_ON
-		CBBinding.showInterstitial( "default" );
+		CBExternal.showInterstitial( CBLocation.Default );
 		_adShowing = true;
 		#endif
 	}
-
+	
 	IEnumerator CloseAd (float duration)
 	{
 		yield return new WaitForSeconds(duration);
-
+		
 		#if UNITY_IPHONE
 		if (GA.SettingsGA.IAD_enabled)
 		{
@@ -270,46 +272,48 @@ public class GA_AdSupport : MonoBehaviour
 		_adShowing = false;
 		//_showAdOnLoad = false;
 	}
-
+	
 	void OnBannerLoaded()
 	{
 		//GA.Log("GA iAd Loaded");
 	}
-
+	
 	void OnBannerClicked()
 	{
 		//GA.Log("GA iAd Clicked");
 		GA.API.Design.NewEvent("Clicks:iAD:" + _eventTriggerID);
 	}
 
-	void OnShowInterstitialEvent( string location )
+	#if CB_ON
+	void OnShowInterstitialEvent(CBLocation location)
 	{
 		//Debug.Log( "didShowInterstitialEvent: " + location );
 		GA.API.Design.NewEvent("Impressions:Chartboost:" + _eventTriggerID);
 	}
-
-	void OnClickInterstitialEvent( string location )
+	
+	void OnClickInterstitialEvent(CBLocation location)
 	{
 		//Debug.Log( "didClickInterstitialEvent: " + location );
 		GA.API.Design.NewEvent("Clicks:Chartboost:" + _eventTriggerID);
 	}
-
-	void OnDismissInterstitialEvent( string location )
+	
+	void OnDismissInterstitialEvent(CBLocation location)
 	{
 		//Debug.Log( "didDismissInterstitialEvent: " + location );
 		_adShowing = false;
 	}
 	
-	void OnCloseInterstitialEvent( string location )
+	void OnCloseInterstitialEvent(CBLocation location)
 	{
 		//Debug.Log( "didCloseInterstitialEvent: " + location );
 		_adShowing = false;
 	}
-
+	#endif
+	
 	private void SaveConditions ()
 	{
 		bool save = false;
-
+		
 		if (GA.SettingsGA.Start_TimePlayed)
 		{
 			float tmpTime = PlayerPrefs.GetFloat("GA_TimePlayed");
@@ -318,40 +322,40 @@ public class GA_AdSupport : MonoBehaviour
 			{
 				_timePlayed = tmpTime;
 			}
-
+			
 			PlayerPrefs.SetFloat("GA_TimePlayed", _timePlayed);
-
+			
 			save = true;
 		}
 		
 		if (GA.SettingsGA.Start_Sessions && !_sessionRecorded)
 		{
 			int tmpSession = PlayerPrefs.GetInt("GA_Sessions");
-
+			
 			if (tmpSession > _sessionsPlayed)
 			{
 				_sessionsPlayed = tmpSession;
 			}
-
+			
 			_sessionRecorded = true;
 			_sessionsPlayed = _sessionsPlayed + 1;
 			
 			PlayerPrefs.SetInt("GA_Sessions", _sessionsPlayed);
-
+			
 			if (_sessionsPlayed > GA.SettingsGA.Sessions)
 			{
 				EnableAds();
 			}
-
+			
 			save = true;
 		}
-
+		
 		if (save)
 		{
 			PlayerPrefs.Save();
 		}
 	}
-
+	
 	/// <summary>
 	/// Start Showing Ads
 	/// </summary>
@@ -360,7 +364,7 @@ public class GA_AdSupport : MonoBehaviour
 		if (GA_ADSUPPORT != null)
 			GA_ADSUPPORT.EnableShowingAds();
 	}
-
+	
 	public void EnableShowingAds()
 	{
 		if (!AdsEnabled)

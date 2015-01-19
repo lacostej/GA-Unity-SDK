@@ -4,6 +4,10 @@ NOTE: To use this GIT repository in your Unity game please add the contents dire
 
 ### Recent Changes:
 
+##### v.0.6.9:
+- Unity 5 support.
+- Bug fixes and stability.
+
 ##### v.0.6.8:
 - Fixed an issue with Design event values from the previous version.
 

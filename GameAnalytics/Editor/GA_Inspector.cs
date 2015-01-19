@@ -76,10 +76,10 @@ public class GA_Inspector : Editor
 	private GUIContent _iAdposition				= new GUIContent("iAd Position:", "Position of the iOS iAd banner ads using Unity GUI coords and conventions. Set layout to manual to customize position.");
 	//private GUIContent _CB						= new GUIContent("Chartboost:", "This fold out contains options for using Chartboost ads.");
 	private GUIContent _CBenabled				= new GUIContent("Chartboost", "Enable/diable Chartboost ads.");
-	#if !UNITY_ANDROID
-	private GUIContent _CBappID					= new GUIContent("App ID:", "Your App ID. You can find this in under your app in Chartboost.");
-	private GUIContent _CBappSig				= new GUIContent("App Signature:", "Your App Signature. You can find this in under your app in Chartboost.");
-	#endif
+	//#if !UNITY_ANDROID
+	//private GUIContent _CBappID					= new GUIContent("App ID:", "Your App ID. You can find this in under your app in Chartboost.");
+	//private GUIContent _CBappSig				= new GUIContent("App Signature:", "Your App Signature. You can find this in under your app in Chartboost.");
+	//#endif
 
 	//private static readonly Texture2D _triggerAdNotEnabledTexture = new Texture2D(1, 1);
 	private static bool _checkedProjectNames = false;
@@ -1043,16 +1043,28 @@ public class GA_Inspector : Editor
 					GUILayout.BeginHorizontal();
 					GUILayout.Label("", GUILayout.Width(7));
 					GUILayout.Label(_iAdtype, GUILayout.Width(150));
+					#if (UNITY_4_9 || UNITY_4_8 || UNITY_4_7 || UNITY_4_6 || UNITY_4_5 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
 					ga.IAD_type = (ADBannerView.Type)EditorGUILayout.EnumPopup(ga.IAD_type, GUILayout.Width(125));
+					#else
+					ga.IAD_type = (UnityEngine.iOS.ADBannerView.Type)EditorGUILayout.EnumPopup(ga.IAD_type, GUILayout.Width(125));
+					#endif
 					GUILayout.EndHorizontal();
 					
 					GUILayout.BeginHorizontal();
 					GUILayout.Label("", GUILayout.Width(7));
 					GUILayout.Label(_iAdlayout, GUILayout.Width(150));
+					#if (UNITY_4_9 || UNITY_4_8 || UNITY_4_7 || UNITY_4_6 || UNITY_4_5 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
 					ga.IAD_layout = (ADBannerView.Layout)EditorGUILayout.EnumPopup(ga.IAD_layout, GUILayout.Width(125));
+					#else
+					ga.IAD_layout = (UnityEngine.iOS.ADBannerView.Layout)EditorGUILayout.EnumPopup(ga.IAD_layout, GUILayout.Width(125));
+					#endif
 					GUILayout.EndHorizontal();
-					
+
+					#if (UNITY_4_9 || UNITY_4_8 || UNITY_4_7 || UNITY_4_6 || UNITY_4_5 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
 					GUI.enabled = GA.SettingsGA.IAD_enabled && ga.IAD_layout == ADBannerView.Layout.Manual;
+					#else
+					GUI.enabled = GA.SettingsGA.IAD_enabled && ga.IAD_layout == UnityEngine.iOS.ADBannerView.Layout.Manual;
+					#endif
 					
 					GUILayout.BeginHorizontal();
 					GUILayout.Label("", GUILayout.Width(7));
@@ -1087,12 +1099,12 @@ public class GA_Inspector : Editor
 
 					GUILayout.BeginHorizontal();
 					GUILayout.Label("", GUILayout.Width(-5));
-					EditorGUILayout.HelpBox("To setup Chartboost for Android please go to the Chartboost menu and select Android Setup (Chartboost SDK must be imported). For more information on Chartboost visit their online documentation at https://help.chartboost.com/documentation/unity.", MessageType.Info);
+					EditorGUILayout.HelpBox("To setup Chartboost please see the Chartboost online documentation at https://help.chartboost.com/documentation/unity.", MessageType.Info);
 					GUILayout.EndHorizontal();
 
 					#else
 
-					GUILayout.BeginHorizontal();
+					/*GUILayout.BeginHorizontal();
 					GUILayout.Label("", GUILayout.Width(7));
 					GUILayout.Label(_CBappID, GUILayout.Width(150));
 					ga.CB_appID = EditorGUILayout.TextField(ga.CB_appID);
@@ -1102,6 +1114,11 @@ public class GA_Inspector : Editor
 					GUILayout.Label("", GUILayout.Width(7));
 					GUILayout.Label(_CBappSig, GUILayout.Width(150));
 					ga.CB_appSig = EditorGUILayout.TextField(ga.CB_appSig);
+					GUILayout.EndHorizontal();*/
+
+					GUILayout.BeginHorizontal();
+					GUILayout.Label("", GUILayout.Width(-5));
+					EditorGUILayout.HelpBox("To setup Chartboost please see the Chartboost online documentation at https://help.chartboost.com/documentation/unity.", MessageType.Info);
 					GUILayout.EndHorizontal();
 
 					#endif

@@ -86,9 +86,14 @@ public class GA_SystemTracker : MonoBehaviour
 		GA.API.Debugging.SubmitErrorStackTrace = SubmitErrorStackTrace;
 		GA.API.Debugging.SubmitErrorSystemInfo = SubmitErrorSystemInfo;
 		GA.API.Debugging.MaxErrorCount = MaxErrorCount;
-		
-		if(GA.API.Debugging.SubmitErrors) //Warning this registerLogCallback is slow because it saves the stacktraces
+
+		#if (UNITY_4_9 || UNITY_4_8 || UNITY_4_7 || UNITY_4_6 || UNITY_4_5 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
+		if (GA.API.Debugging.SubmitErrors)
 			Application.RegisterLogCallback(GA.API.Debugging.HandleLog);
+		#else
+		if (GA.API.Debugging.SubmitErrors)
+			Application.logMessageReceived += GA.API.Debugging.HandleLog;
+		#endif
 
 		// Add system specs to the submit queue
 		if (IncludeSystemSpecs)
@@ -108,7 +113,15 @@ public class GA_SystemTracker : MonoBehaviour
 			return;
 		
 		if (GA_SYSTEMTRACKER == this)
-			GA_SYSTEMTRACKER = null;	
+			GA_SYSTEMTRACKER = null;
+
+		#if (UNITY_4_9 || UNITY_4_8 || UNITY_4_7 || UNITY_4_6 || UNITY_4_5 || UNITY_4_3 || UNITY_4_2 || UNITY_4_1 || UNITY_4_0_1 || UNITY_4_0 || UNITY_3_5 || UNITY_3_4 || UNITY_3_3 || UNITY_3_2 || UNITY_3_1 || UNITY_3_0_0 || UNITY_3_0 || UNITY_2_6_1 || UNITY_2_6)
+		if (GA.API.Debugging.SubmitErrors)
+			Application.RegisterLogCallback(null);
+		#else
+		if (GA.API.Debugging.SubmitErrors)
+			Application.logMessageReceived -= GA.API.Debugging.HandleLog;
+		#endif
 	}
 	
 	#endregion
