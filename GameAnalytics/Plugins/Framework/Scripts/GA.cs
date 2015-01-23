@@ -97,7 +97,7 @@ public class GA {
 				string uniquePath = AssetDatabase.GenerateUniqueAssetPath("Assets/Resources/GameAnalytics/GA_Settings.asset");
 				AssetDatabase.CreateAsset(asset, uniquePath);
 				if(uniquePath != "Assets/Resources/GameAnalytics/GA_Settings.asset")
-					GA.Log("GameAnalytics: The path Assets/Resources/GameAnalytics/GA_Settings.asset used to save the settings file is not available.");
+					Debug.Log("GameAnalytics: The path Assets/Resources/GameAnalytics/GA_Settings.asset used to save the settings file is not available.");
 				AssetDatabase.SaveAssets ();
 				Debug.LogWarning("GameAnalytics: Settings file didn't exist and was created");
 				Selection.activeObject = asset;
